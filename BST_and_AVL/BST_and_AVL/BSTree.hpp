@@ -30,9 +30,10 @@ BSTree<T>::BinTreeNode::~BinTreeNode()
 {
 }
 
-template <typename T>
-const T& BSTree<T>::BinTreeNode::operator[](unsigned index) const
+template<typename T>
+inline const T& BSTree<T>::BinTreeNode::operator[](unsigned int index) const
 {
+	// TODO: insert return statement here
 }
 
 template <typename T>
@@ -80,9 +81,10 @@ BSTree<T>& BSTree<T>::operator=(const BSTree& rhs)
 {
 }
 
-template <typename T>
-const T& BSTree<T>::operator[](unsigned index) const
+template<typename T>
+inline const T& BSTree<T>::operator[](unsigned int index) const
 {
+	// TODO: insert return statement here
 }
 
 template <typename T>
