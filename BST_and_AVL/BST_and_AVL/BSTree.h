@@ -14,15 +14,18 @@ Creation date: 2/4/21
 #include <queue>
 #include <string>
 
-class BSTException : public std::runtime_error {
+class BSTException : public std::runtime_error
+{
 public:
 	BSTException(const std::string& Message) : std::runtime_error(Message.c_str()) {};
 };
 
 template <typename T>
-class BSTree {
+class BSTree
+{
 protected:
-	class BinTreeNode {
+	class BinTreeNode
+	{
 	public:
 		BinTreeNode(const T& value);			
 		BinTreeNode(const BinTreeNode& rhs);

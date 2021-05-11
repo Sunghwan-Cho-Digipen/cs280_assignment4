@@ -15,7 +15,8 @@ Creation date: 2/4/21
 #include "BSTree.h"
 
 template <typename T>
-class AVLTree : public BSTree<T> {
+class AVLTree : public BSTree<T>
+{
 public:
 	AVLTree(void);
 
