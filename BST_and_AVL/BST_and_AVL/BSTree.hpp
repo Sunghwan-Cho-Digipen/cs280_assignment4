@@ -17,23 +17,37 @@ Creation date: 2/4/21
 
 template <typename T>
 BSTree<T>::BinTreeNode::BinTreeNode(const T& value)
+	: pLeftTree(nullptr), pRightTree(nullptr), data(value), size(0)
 {
 }
 
 template <typename T>
 BSTree<T>::BinTreeNode::BinTreeNode(const BinTreeNode& rhs)
+	: data(rhs.data), size(rhs.size)
 {
+	if(rhs.pLeftTree != nullptr)
+	{
+		pLeftTree = new BinTreeNode(rhs.pLeftTree);
+	}
+	
+	if(rhs.pRightTree != nullptr)
+	{
+		pRightTree = new BinTreeNode(rhs.pRightTree);
+	}
 }
 
 template <typename T>
 BSTree<T>::BinTreeNode::~BinTreeNode()
 {
+	delete pLeftTree;
+	delete pRightTree;
 }
 
 template<typename T>
 inline const T& BSTree<T>::BinTreeNode::operator[](unsigned int index) const
 {
 	// TODO: insert return statement here
+	
 }
 
 template <typename T>
@@ -59,6 +73,10 @@ bool BSTree<T>::BinTreeNode::Find(const T& value)
 template <typename T>
 T BSTree<T>::BinTreeNode::FindLargest()
 {
+	int rightLargest;
+	int leftLargest;
+
+	return rightLargest > leftLargest ? rightLargest : leftLargest;
 }
 
 template <typename T>
@@ -90,6 +108,7 @@ inline const T& BSTree<T>::operator[](unsigned int index) const
 template <typename T>
 void BSTree<T>::Insert(const T& value)
 {
+	pRootNode->Insert(value);
 }
 
 template <typename T>
@@ -100,16 +119,19 @@ void BSTree<T>::Remove(const T& value)
 template <typename T>
 bool BSTree<T>::IsEmpty() const
 {
+	return pRootNode == nullptr;
 }
 
 template <typename T>
 unsigned BSTree<T>::Size() const
 {
+	return pRootNode->size;
 }
 
 template <typename T>
 int BSTree<T>::Height() const
 {
+	return pRootNode->Height();
 }
 
 template <typename T>
@@ -120,6 +142,7 @@ void BSTree<T>::Clear()
 template <typename T>
 bool BSTree<T>::Find(const T& value) const
 {
+	return pRootNode->Find(value);
 }
 
 template <typename T>
