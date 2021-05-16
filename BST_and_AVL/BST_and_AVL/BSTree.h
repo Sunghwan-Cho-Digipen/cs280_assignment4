@@ -6,7 +6,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: BSTree.h
 Project: Assignment 4 - BST & AVL
 Author: Kevin Wright
-Creation date: 2/4/21
+Creation date: 05/15/21
 ******************************************************************/
 #pragma once
 
@@ -39,6 +39,7 @@ protected:
 		bool Remove(BinTreeNode*& root, BinTreeNode* parentPtr, const T& value);
 		int Height() const;
 		bool Find(const T& value);
+		//int GetSize(BinTreeNode* node);
 		T FindLargest();
 
 		BinTreeNode* pLeftTree;

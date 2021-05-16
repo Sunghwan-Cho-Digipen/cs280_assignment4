@@ -6,7 +6,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: AVLTree.hpp
 Project: Assignment 4 - BST & AVL
 Author: Sunghwan Cho
-Creation date: 2/4/21
+Creation date: 05/15/21
 ******************************************************************/
 
 #pragma once

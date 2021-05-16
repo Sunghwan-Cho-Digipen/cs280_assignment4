@@ -6,7 +6,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: AVLTree.h
 Project: Assignment 4 - BST & AVL
 Author: Kevin Wright
-Creation date: 2/4/21
+Creation date: 05/15/21
 ******************************************************************/
 #pragma once
 #include <stack>
