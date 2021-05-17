@@ -403,8 +403,8 @@ int main() {
 
 		Test1<AVLTree<int> >,				//  9 random insert
 		Test2<AVLTree<int> >,				// 10 sorted insert
-		//Test3<AVLTree<int> >,				// 11 random insert/remove some
-		//Test4<AVLTree<int> >,				// 12 random insert/remove all
+		Test3<AVLTree<int> >,				// 11 random insert/remove some
+		Test4<AVLTree<int> >,				// 12 random insert/remove all
 		Test5<AVLTree<int> >,				// 13 random insert/clear
 		Test6<AVLTree<int> >,				// 14 random insert/find
 		//Test7<AVLTree<int> >,				// 15 assignment
