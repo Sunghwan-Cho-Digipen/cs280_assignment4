@@ -17,7 +17,7 @@ Creation date: 05/15/21
 
 template <typename T>
 BSTree<T>::BinTreeNode::BinTreeNode(const T& value)
-	: pLeftTree(nullptr), pRightTree(nullptr), data(value), size(0)
+	: pLeftTree(nullptr), pRightTree(nullptr), data(value), size(1)
 {
 }
 
@@ -127,7 +127,6 @@ bool BSTree<T>::BinTreeNode::Remove(BinTreeNode*& root, BinTreeNode* parentPtr, 
 			}
 		}
 		return isGoingToBeRemoved;
-		
 	}
 	else if (data > value)
 	{
@@ -207,7 +206,7 @@ int BSTree<T>::BinTreeNode::Height() const
 	const int leftHeight = (pLeftTree == nullptr) ? -1 : pLeftTree->Height();
 	const int rightHeight = (pRightTree == nullptr) ? -1 : pRightTree->Height();
 
-	return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+	return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
 }
 
 template <typename T>

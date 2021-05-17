@@ -93,12 +93,64 @@ void AVLTree<T>::Remove(typename BSTree<T>::BinTreeNode*& tree, const T& value,
 template <typename T>
 void AVLTree<T>::Balance(std::stack<typename BSTree<T>::BinTreeNode**>& nodes)
 {
-	
+	if (nodes.empty() == true)
+	{
+		return;
+	}
+
+	while (nodes.empty() == false)
+	{
+		typename BSTree<T>::BinTreeNode** node_ptr = nodes.top();
+		nodes.pop();
+		const int HeightOfLeft = (*node_ptr)->pLeftTree != nullptr ? (*node_ptr)->pLeftTree->Height() : -1;
+		const int HeightOfRight = (*node_ptr)->pRightTree != nullptr ? (*node_ptr)->pRightTree->Height() : -1;
+		const int Subtraction = HeightOfLeft - HeightOfRight;
+
+		if (Subtraction > 1)
+		{
+			typename BSTree<T>::BinTreeNode* child = (*node_ptr)->pLeftTree;
+
+			const int ChildLeftTreeHeight = child->pLeftTree != nullptr ? (child)->pLeftTree->Height() : -1;
+			const int ChildRightTreeHeight = child->pRightTree != nullptr ? (child)->pRightTree->Height() : -1;
+			const int ChildSubtraction = ChildLeftTreeHeight - ChildRightTreeHeight;
+			
+			if (ChildSubtraction >= 0)
+			{
+				RotateRight(*node_ptr); // This should be LL rotation so RotateRight()
+			}
+			else
+			{
+				RotateLeft((*node_ptr)->pLeftTree); // This should be LR rotation so RotateLeft() and Rotate Right()
+				RotateRight(*node_ptr);
+			}
+			return;
+		}
+
+		if (Subtraction < -1)
+		{
+			typename BSTree<T>::BinTreeNode* child = (*node_ptr)->pRightTree;
+			const int ChildLeftTreeHeight = child->pLeftTree != nullptr ? (child)->pLeftTree->Height() : -1;
+			const int ChildRightTreeHeight = child->pRightTree != nullptr ? (child)->pRightTree->Height() : -1;
+			const int ChildSubtraction = ChildLeftTreeHeight - ChildRightTreeHeight;
+			
+			if (ChildSubtraction <= 0)
+			{
+				RotateLeft(*node_ptr); // This should be RR rotation so RotateLeft()
+			}
+			else
+			{
+				RotateRight((*node_ptr)->pRightTree); // This should be RL rotation so RotateRight() and RotateLeft()
+				RotateLeft(*node_ptr);
+			}
+			return;
+		}
+
+	}
 }
 
 template <typename T>
-void AVLTree<T>::RotateLeft(typename BSTree<T>::BinTreeNode*& tree)
-{
+void AVLTree<T>::RotateLeft(typename BSTree<T>::BinTreeNode*& tree) // Rotate "to" left
+{	
 	typename BSTree<T>::BinTreeNode* parent = tree;
 	typename BSTree<T>::BinTreeNode* child = tree->pRightTree;
 
@@ -115,8 +167,8 @@ void AVLTree<T>::RotateLeft(typename BSTree<T>::BinTreeNode*& tree)
 }
 
 template <typename T>
-void AVLTree<T>::RotateRight(typename BSTree<T>::BinTreeNode*& tree)
-{
+void AVLTree<T>::RotateRight(typename BSTree<T>::BinTreeNode*& tree) // Rotate "to" right
+{	
 	typename BSTree<T>::BinTreeNode* parent = tree;
 	typename BSTree<T>::BinTreeNode* child = tree->pLeftTree;
 
