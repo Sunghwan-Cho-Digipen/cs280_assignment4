@@ -135,7 +135,7 @@ void Test4(void) {
 	tree.DebugPrint(true);
 
 	std::cout << "remove 6, 5, 8, 9, 7:" << std::endl << std::endl;
-	tree.Remove(6);
+	tree.Remove(7);
 	tree.DebugPrint(true);
 	tree.Remove(5);
 	tree.DebugPrint(true);
@@ -143,7 +143,7 @@ void Test4(void) {
 	tree.DebugPrint(true);
 	tree.Remove(9);
 	tree.DebugPrint(true);
-	tree.Remove(7);
+	tree.Remove(6);
 	tree.DebugPrint(true);
 
 	std::cout << "remove 2 from IsEmpty tree:" << std::endl;
@@ -407,7 +407,7 @@ int main() {
 		Test4<AVLTree<int> >,				// 12 random insert/remove all
 		Test5<AVLTree<int> >,				// 13 random insert/clear
 		Test6<AVLTree<int> >,				// 14 random insert/find
-		//Test7<AVLTree<int> >,				// 15 assignment
+		Test7<AVLTree<int> >,				// 15 assignment
 		Test8<AVLTree<int> >,				// 16 copy constructor
 
 		TestIndex<BSTree<char> >,			// 17 random insert/select

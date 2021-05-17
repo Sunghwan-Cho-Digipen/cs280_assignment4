@@ -30,18 +30,14 @@ void AVLTree<T>::Insert(const T& value)
 template <typename T>
 void AVLTree<T>::Remove(const T& value)
 {
-	if (this->pRootNode == nullptr)
+	if (BSTree<T>::IsEmpty())
 	{
 		throw BSTException("Item was not found");
 	}
-	if (this->pRootNode->Find(value) == false)
-	{
-		throw BSTException("Item was not found");
-	}
-
-	std::stack<typename BSTree<T>::BinTreeNode**> nodeStack;
-	Remove(this->pRootNode, value, nodeStack);
-	Balance(nodeStack);
+	std::stack<typename BSTree<T>::BinTreeNode**> paths;
+	Remove(BSTree<T>::pRootNode, value, paths);
+	BSTree<T>::Remove(value);
+	Balance(paths);
 }
 
 template <typename T>
@@ -87,83 +83,30 @@ template <typename T>
 void AVLTree<T>::Remove(typename BSTree<T>::BinTreeNode*& tree, const T& value,
 	std::stack<typename BSTree<T>::BinTreeNode**>& nodes)
 {
-	if (tree == nullptr)
+	nodes.push(&tree);
+	const T& myData = tree->data;
+	if (value == myData)
 	{
-		throw BSTException("Item was not found");
-	}
-
-	if (tree->data < value)
-	{
-		if (tree->pRightTree == nullptr)
-		{
-			throw BSTException("Item was not found");
-		}
-		
-		--tree->size;
-		nodes.push(&tree);
-		Remove(tree->pRightTree, value, nodes);
 		return;
 	}
-
-	if (tree->data > value)
+	else
 	{
-		if (tree->pLeftTree == nullptr)
+		if (value < myData)
 		{
-			throw BSTException("Item was not found");
+			if (tree->pLeftTree == nullptr)
+			{
+				throw BSTException("Item was not found");
+			}
+			Remove(tree->pLeftTree, value, nodes);
 		}
-		
-		--tree->size;
-		nodes.push(&tree);
-		Remove(tree->pLeftTree, value, nodes);
-		return;
-	}
-	
-	typename BSTree<T>::BinTreeNode** topPointer = nullptr;
-	if (this->pRootNode != tree)
-	{
-		topPointer = nodes.top();
-	}
-	
-	if (tree->pLeftTree != nullptr && tree->pRightTree != nullptr)
-	{
-		tree->data = tree->pLeftTree->FindLargest();
-		--tree->size;
-		nodes.push(&tree);
-		Remove(tree->pLeftTree, tree->data, nodes);
-	}
-	else if (tree->pLeftTree == nullptr || tree->pRightTree == nullptr)
-	{
-		typename BSTree<T>::BinTreeNode* childPtr = (tree->pLeftTree == nullptr ? tree->pRightTree : tree->pLeftTree);
-		typename BSTree<T>::BinTreeNode* currentPtr = tree;
-		currentPtr->pLeftTree = currentPtr->pRightTree = nullptr;
-
-		if (topPointer == nullptr)
+		else
 		{
-			this->pRootNode = childPtr;
-			delete currentPtr;
-			return;
+			if (tree->pRightTree == nullptr)
+			{
+				throw BSTException("Item was not found");
+			}
+			Remove(tree->pRightTree, value, nodes);
 		}
-
-		typename BSTree<T>::BinTreeNode*& childTreePointer = (*topPointer)->pLeftTree == tree ? (*topPointer)->pLeftTree : (*topPointer)->pRightTree;
-
-		--currentPtr->size;
-		delete currentPtr;
-		childTreePointer = childPtr;
-	}
-	else if (tree->pLeftTree == nullptr && tree->pRightTree == nullptr)
-	{
-		if (topPointer == nullptr)
-		{
-			delete tree;
-			this->pRootNode = nullptr;
-			return;
-		}
-		
-		typename BSTree<T>::BinTreeNode*& childTreePointer = (*topPointer)->pLeftTree == tree ? (*topPointer)->pLeftTree : (*topPointer)->pRightTree;
-		
-		--tree->size;
-		delete tree;
-		childTreePointer = nullptr;
 	}
 }
 
@@ -256,6 +199,10 @@ void AVLTree<T>::RotateRight(typename BSTree<T>::BinTreeNode*& tree) // Rotate "
 template <typename T>
 int AVLTree<T>::Subtract(typename BSTree<T>::BinTreeNode* node)
 {
+	if(node == nullptr)
+	{
+		return 0;
+	}
 	const int LeftTreeHeight = node->pLeftTree != nullptr ? (node)->pLeftTree->Height() : -1;
 	const int RightTreeHeight = node->pRightTree != nullptr ? (node)->pRightTree->Height() : -1;
 	return LeftTreeHeight - RightTreeHeight;
