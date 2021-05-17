@@ -9,11 +9,19 @@ Author: Kevin Wright
 Creation date: 2/4/21
 ******************************************************************/
 #include <iostream>
+
+
 #include <random>
 #include <set>
 
 #include "BSTree.h"
 #include "AVLTree.h"
+
+#include <crtdbg.h>
+#if _DEBUG
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
 
 void GetRandomValues(int* array, int size) {
 	std::mt19937 rand(2);	// Hard coded to this because the numbers looked good
@@ -393,20 +401,20 @@ int main() {
 		Test7<BSTree<int> >,				//  7 assignment
 		Test8<BSTree<int> >,				//  8 copy constructor
 
-		Test1<AVLTree<int> >,				//  9 random insert
-		Test2<AVLTree<int> >,				// 10 sorted insert
-		Test3<AVLTree<int> >,				// 11 random insert/remove some
-		Test4<AVLTree<int> >,				// 12 random insert/remove all
-		Test5<AVLTree<int> >,				// 13 random insert/clear
-		Test6<AVLTree<int> >,				// 14 random insert/find
-		Test7<AVLTree<int> >,				// 15 assignment
-		Test8<AVLTree<int> >,				// 16 copy constructor
+		//Test1<AVLTree<int> >,				//  9 random insert
+		//Test2<AVLTree<int> >,				// 10 sorted insert
+		//Test3<AVLTree<int> >,				// 11 random insert/remove some
+		//Test4<AVLTree<int> >,				// 12 random insert/remove all
+		//Test5<AVLTree<int> >,				// 13 random insert/clear
+		//Test6<AVLTree<int> >,				// 14 random insert/find
+		//Test7<AVLTree<int> >,				// 15 assignment
+		//Test8<AVLTree<int> >,				// 16 copy constructor
 
 		TestIndex<BSTree<char> >,			// 17 random insert/select
-		TestIndex<AVLTree<char> >,			// 18 random insert/select
+		//TestIndex<AVLTree<char> >,			// 18 random insert/select
 		TestStrings<BSTree<std::string> >,	// 19 random insert strings/select
-		TestStrings<AVLTree<std::string> >,	// 20 random insert strings/select/
-		AVLStress,							// 21 stress avl only
+		//TestStrings<AVLTree<std::string> >,	// 20 random insert strings/select/
+		//AVLStress,							// 21 stress avl only
 	};
 	int numTests = static_cast<int>(sizeof(tests) / sizeof(*tests));
 	if (test_num > 0) {
@@ -434,5 +442,6 @@ int main() {
 	system("pause");
 #endif
 
+	_CrtDumpMemoryLeaks();
 	return 0;
 }

@@ -54,22 +54,22 @@ BSTree<T>::BinTreeNode::~BinTreeNode()
 template<typename T>
 const T& BSTree<T>::BinTreeNode::operator[](unsigned int index) const
 {
-	unsigned int leftMaxNum = 0;
+	unsigned int leftMaxIndex = 0;
 	if (pLeftTree != nullptr)
 	{
-		leftMaxNum = pLeftTree->size;
+		leftMaxIndex = pLeftTree->size;
 	}
-	if (index < leftMaxNum)
+	if (index < leftMaxIndex)
 	{
 		return (*pLeftTree)[index];
 	}
-	if (index == leftMaxNum)
+	if (index == leftMaxIndex)
 	{
 		return data;
 	}
 	if (pRightTree != nullptr)
 	{
-		return (*pRightTree)[index - leftMaxNum - 1];
+		return (*pRightTree)[index - leftMaxIndex - 1];
 	}
 
 	throw BSTException("Out of Range");
@@ -174,25 +174,13 @@ bool BSTree<T>::BinTreeNode::Remove(BinTreeNode*& root, BinTreeNode* parentPtr, 
 		if (root == this)
 		{
 			root = targetNode;
-			pLeftTree = nullptr;
-			pRightTree = nullptr;
-
+			pLeftTree = pRightTree = nullptr;
 			return true;
 		}
+		
+		parentPtr->pLeftTree == this ? parentPtr->pLeftTree = targetNode : parentPtr->pRightTree = targetNode;
 
-		if (parentPtr->pLeftTree == this)
-		{
-			parentPtr->pLeftTree = targetNode;
-		}
-		else
-		{
-			parentPtr->pRightTree = targetNode;
-
-		}
-
-		pLeftTree = nullptr;
-		pRightTree = nullptr;
-
+		pLeftTree = pRightTree = nullptr;
 		return true;
 	}
 	else if (pRightTree == nullptr && pLeftTree == nullptr)
@@ -204,14 +192,8 @@ bool BSTree<T>::BinTreeNode::Remove(BinTreeNode*& root, BinTreeNode* parentPtr, 
 			return true;
 		}
 
-		if (parentPtr->pLeftTree == this)
-		{
-			parentPtr->pLeftTree = nullptr;
-		}
-		else
-		{
-			parentPtr->pRightTree = nullptr;
-		}
+		parentPtr->pLeftTree == this ? parentPtr->pLeftTree = nullptr : parentPtr->pRightTree = nullptr;
+		
 		return true;
 	}
 
