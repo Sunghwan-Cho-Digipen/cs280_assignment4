@@ -102,17 +102,12 @@ void AVLTree<T>::Balance(std::stack<typename BSTree<T>::BinTreeNode**>& nodes)
 	{
 		typename BSTree<T>::BinTreeNode** node_ptr = nodes.top();
 		nodes.pop();
-		const int HeightOfLeft = (*node_ptr)->pLeftTree != nullptr ? (*node_ptr)->pLeftTree->Height() : -1;
-		const int HeightOfRight = (*node_ptr)->pRightTree != nullptr ? (*node_ptr)->pRightTree->Height() : -1;
-		const int Subtraction = HeightOfLeft - HeightOfRight;
-
+		const int Subtraction = Subtract(*node_ptr);
+		
 		if (Subtraction > 1)
 		{
 			typename BSTree<T>::BinTreeNode* child = (*node_ptr)->pLeftTree;
-
-			const int ChildLeftTreeHeight = child->pLeftTree != nullptr ? (child)->pLeftTree->Height() : -1;
-			const int ChildRightTreeHeight = child->pRightTree != nullptr ? (child)->pRightTree->Height() : -1;
-			const int ChildSubtraction = ChildLeftTreeHeight - ChildRightTreeHeight;
+			const int ChildSubtraction = Subtract(child);
 			
 			if (ChildSubtraction >= 0)
 			{
@@ -129,9 +124,7 @@ void AVLTree<T>::Balance(std::stack<typename BSTree<T>::BinTreeNode**>& nodes)
 		if (Subtraction < -1)
 		{
 			typename BSTree<T>::BinTreeNode* child = (*node_ptr)->pRightTree;
-			const int ChildLeftTreeHeight = child->pLeftTree != nullptr ? (child)->pLeftTree->Height() : -1;
-			const int ChildRightTreeHeight = child->pRightTree != nullptr ? (child)->pRightTree->Height() : -1;
-			const int ChildSubtraction = ChildLeftTreeHeight - ChildRightTreeHeight;
+			const int ChildSubtraction = Subtract(child);
 			
 			if (ChildSubtraction <= 0)
 			{
@@ -144,7 +137,6 @@ void AVLTree<T>::Balance(std::stack<typename BSTree<T>::BinTreeNode**>& nodes)
 			}
 			return;
 		}
-
 	}
 }
 
@@ -182,4 +174,12 @@ void AVLTree<T>::RotateRight(typename BSTree<T>::BinTreeNode*& tree) // Rotate "
 	tree = child;
 	tree->pRightTree->size = ParentSize - ChildSize + SizeOfRightChildOfChild;
 	tree->size = ChildSize - SizeOfRightChildOfChild + tree->pRightTree->size;
+}
+
+template <typename T>
+int AVLTree<T>::Subtract(typename BSTree<T>::BinTreeNode* node)
+{
+	const int LeftTreeHeight = node->pLeftTree != nullptr ? (node)->pLeftTree->Height() : -1;
+	const int RightTreeHeight = node->pRightTree != nullptr ? (node)->pRightTree->Height() : -1;
+	return LeftTreeHeight - RightTreeHeight;
 }

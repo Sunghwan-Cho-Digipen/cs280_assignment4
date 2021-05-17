@@ -401,14 +401,14 @@ int main() {
 		Test7<BSTree<int> >,				//  7 assignment
 		Test8<BSTree<int> >,				//  8 copy constructor
 
-		//Test1<AVLTree<int> >,				//  9 random insert
-		//Test2<AVLTree<int> >,				// 10 sorted insert
+		Test1<AVLTree<int> >,				//  9 random insert
+		Test2<AVLTree<int> >,				// 10 sorted insert
 		//Test3<AVLTree<int> >,				// 11 random insert/remove some
 		//Test4<AVLTree<int> >,				// 12 random insert/remove all
-		//Test5<AVLTree<int> >,				// 13 random insert/clear
-		//Test6<AVLTree<int> >,				// 14 random insert/find
+		Test5<AVLTree<int> >,				// 13 random insert/clear
+		Test6<AVLTree<int> >,				// 14 random insert/find
 		//Test7<AVLTree<int> >,				// 15 assignment
-		//Test8<AVLTree<int> >,				// 16 copy constructor
+		Test8<AVLTree<int> >,				// 16 copy constructor
 
 		TestIndex<BSTree<char> >,			// 17 random insert/select
 		//TestIndex<AVLTree<char> >,			// 18 random insert/select

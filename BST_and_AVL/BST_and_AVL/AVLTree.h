@@ -5,7 +5,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 
 File Name: AVLTree.h
 Project: Assignment 4 - BST & AVL
-Author: Kevin Wright
+Author: Kevin Wright, Sunghwan Cho
 Creation date: 05/15/21
 ******************************************************************/
 #pragma once
@@ -30,6 +30,7 @@ private:
 	void Balance(std::stack<typename BSTree<T>::BinTreeNode**>& nodes);
 	void RotateLeft(typename BSTree<T>::BinTreeNode*& tree);
 	void RotateRight(typename BSTree<T>::BinTreeNode*& tree);
+	int Subtract(typename BSTree<T>::BinTreeNode* node);
 };
 
 #include "AVLTree.hpp"
