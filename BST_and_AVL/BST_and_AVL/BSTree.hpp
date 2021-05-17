@@ -39,73 +39,182 @@ BSTree<T>::BinTreeNode::BinTreeNode(const BinTreeNode& rhs)
 template <typename T>
 BSTree<T>::BinTreeNode::~BinTreeNode()
 {
-	delete pLeftTree;
-	pLeftTree = nullptr;
-	delete pRightTree;
-	pRightTree = nullptr;
+	if (pLeftTree != nullptr)
+	{
+		delete pLeftTree;
+		pLeftTree = nullptr;
+	}
+	if (pRightTree != nullptr)
+	{
+		delete pRightTree;
+		pRightTree = nullptr;
+	}
 }
 
 template<typename T>
 const T& BSTree<T>::BinTreeNode::operator[](unsigned int index) const
 {
-	// TODO: insert return statement here
-	
+	unsigned int leftMaxNum = 0;
+	if (pLeftTree != nullptr)
+	{
+		leftMaxNum = pLeftTree->size;
+	}
+	if (index < leftMaxNum)
+	{
+		return (*pLeftTree)[index];
+	}
+	if (index == leftMaxNum)
+	{
+		return data;
+	}
+	if (pRightTree != nullptr)
+	{
+		return (*pRightTree)[index - leftMaxNum - 1];
+	}
+
+	throw BSTException("Out of Range");
 }
 
 template <typename T>
 void BSTree<T>::BinTreeNode::Insert(const T& value)
 {
-	if(value > data)
+	++size;
+	if(value >= data)
 	{
-		++size;
 		if (pRightTree != nullptr)
 		{
 			pRightTree->Insert(value);
 		}
 		else
 		{
-			BinTreeNode* newBinTreeNode = new BinTreeNode(value);
-			pRightTree = newBinTreeNode;
+			pRightTree = new BinTreeNode(value);;
 		}
+		return;
 	}
 	else if(value < data)
 	{
-		++size;
 		if (pLeftTree != nullptr)
 		{
 			pLeftTree->Insert(value);
 		}
 		else
 		{
-			BinTreeNode* newBinTreeNode = new BinTreeNode(value);
-			pLeftTree = newBinTreeNode;
+			pLeftTree = new BinTreeNode(value);
 		}
-	}
-	else
-	{
-		throw BSTException("Value is same");
 	}
 }
 
 template <typename T>
 bool BSTree<T>::BinTreeNode::Remove(BinTreeNode*& root, BinTreeNode* parentPtr, const T& value)
 {
-	if (root->Find(value) == true)
+	// I don't know if this is right way to be done, but it seems too nasty code.....
+	
+	if (data < value)
 	{
-
-		if (pLeftTree != nullptr && pRightTree != nullptr)
+		if(pRightTree == nullptr)
 		{
-
+			return false;
 		}
-		else if (pRightTree != nullptr || pLeftTree != nullptr)
+
+		BinTreeNode* targetNode = pRightTree;
+		const bool isGoingToBeRemoved = pRightTree->Remove(root, this, value);
+		if (isGoingToBeRemoved == true)
 		{
-
+			--size;
+			if (targetNode->data == value)
+			{
+				delete targetNode;
+			}
 		}
-		else if (pRightTree == nullptr && pLeftTree == nullptr)
-		{
-
-		}
+		return isGoingToBeRemoved;
+		
 	}
+	else if (data > value)
+	{
+		if (pLeftTree == nullptr)
+		{
+			return false;
+		}
+
+		BinTreeNode* targetNode = pLeftTree;
+		const bool isGoingToBeRemoved = pLeftTree->Remove(root, this, value);
+
+		if (isGoingToBeRemoved == true)
+		{
+			--size;
+			if (targetNode->data == value)
+			{
+				delete targetNode;
+			}
+		}
+		return isGoingToBeRemoved;
+	}
+
+	if (pLeftTree != nullptr && pRightTree != nullptr)
+	{
+		--size;
+		data = pLeftTree->FindLargest();
+
+		BinTreeNode* targetNode = pLeftTree;
+		const bool isGoingToBeRemoved = pLeftTree->Remove(root, this, data);
+		if (isGoingToBeRemoved == true)
+		{
+			if (targetNode->data == data)
+			{
+				delete targetNode;
+			}
+		}
+		return true;
+	}
+	else if (pRightTree != nullptr || pLeftTree != nullptr)
+	{
+		--size;
+		BinTreeNode* targetNode = (pLeftTree == nullptr ? pRightTree : pLeftTree);
+
+		if (root == this)
+		{
+			root = targetNode;
+			pLeftTree = nullptr;
+			pRightTree = nullptr;
+
+			return true;
+		}
+
+		if (parentPtr->pLeftTree == this)
+		{
+			parentPtr->pLeftTree = targetNode;
+		}
+		else
+		{
+			parentPtr->pRightTree = targetNode;
+
+		}
+
+		pLeftTree = nullptr;
+		pRightTree = nullptr;
+
+		return true;
+	}
+	else if (pRightTree == nullptr && pLeftTree == nullptr)
+	{
+		--size;
+		if (root == this)
+		{
+			root = nullptr;
+			return true;
+		}
+
+		if (parentPtr->pLeftTree == this)
+		{
+			parentPtr->pLeftTree = nullptr;
+		}
+		else
+		{
+			parentPtr->pRightTree = nullptr;
+		}
+		return true;
+	}
+
 	
 	return false;
 }
@@ -122,52 +231,29 @@ int BSTree<T>::BinTreeNode::Height() const
 template <typename T>
 bool BSTree<T>::BinTreeNode::Find(const T& value)
 {
-	if(value > data)
+	if(data == value)
 	{
-		if(pRightTree != nullptr)
-		{
-			return pRightTree->Find(value);
-		}
-		return false;
+		return true;
 	}
 	
-	if(value < data)
-	{
-		if(pLeftTree != nullptr)
-		{
-			return pLeftTree->Find(value);
-		}
-		return false;
-	}
-	return true;
+	const bool isFoundInLeft = pLeftTree != nullptr ? pLeftTree->Find(value) : false;
+	const bool isFoundInRight = pRightTree != nullptr ? pRightTree->Find(value) : false;
+	
+	return isFoundInLeft || isFoundInRight;
 }
-
-//template <typename T>
-//int BSTree<T>::BinTreeNode::GetSize(BinTreeNode* node)
-//{
-//	if(this == nullptr)
-//	{
-//		return 0;
-//	}
-//	else
-//	{
-//		return 1 + GetSize(pRightTree) + GetSize(pLeftTree);
-//	}
-//}
 
 template <typename T>
 T BSTree<T>::BinTreeNode::FindLargest()
 {
 	if(pRightTree != nullptr)
 	{
-		BinTreeNode* currentNode = pRightTree;
 		return pRightTree->FindLargest();
 	}
 	return data;
 }
 
 template <typename T>
-BSTree<T>::BSTree(): pRootNode(new BinTreeNode())
+BSTree<T>::BSTree(): pRootNode(nullptr)
 {
 	
 }
@@ -190,6 +276,7 @@ BSTree<T>::~BSTree()
 template <typename T>
 BSTree<T>& BSTree<T>::operator=(const BSTree& rhs)
 {
+	Clear();
 	pRootNode = rhs.pRootNode;
 	return *this;
 }
@@ -197,27 +284,37 @@ BSTree<T>& BSTree<T>::operator=(const BSTree& rhs)
 template<typename T>
 const T& BSTree<T>::operator[](unsigned int index) const
 {
-	const unsigned int totalSize = Size();
-	if(index >= totalSize)
-	{
-		throw BSTException("Value not found");
-	}
-	return pRootNode[index];
+	return (*pRootNode)[index];
 }
 
 template <typename T>
 void BSTree<T>::Insert(const T& value)
 {
+	if (IsEmpty() == true)
+	{
+		pRootNode = new BinTreeNode(value);
+		return;
+	}
 	pRootNode->Insert(value);
 }
 
 template <typename T>
 void BSTree<T>::Remove(const T& value)
 {
-	bool didValueRemoved = pRootNode->Remove(pRootNode, nullptr, value);
+	if(pRootNode == nullptr)
+	{
+		throw BSTException("Item was not found");
+	}
+
+	BinTreeNode* targetNode = pRootNode;
+	const bool didValueRemoved = pRootNode->Remove(pRootNode, nullptr, value);
 	if(didValueRemoved == false)
 	{
-		throw BSTException("Value not found");
+		throw BSTException("Item was not found");
+	}
+	if(targetNode != pRootNode)
+	{
+		delete targetNode;
 	}
 }
 
@@ -236,19 +333,27 @@ unsigned BSTree<T>::Size() const
 template <typename T>
 int BSTree<T>::Height() const
 {
-	return pRootNode->Height();
+	return pRootNode == nullptr ? -1 : pRootNode->Height();
 }
 
 template <typename T>
 void BSTree<T>::Clear()
 {
-	delete[] pRootNode;
-	pRootNode = nullptr;
+	if (pRootNode != nullptr)
+	{
+		delete pRootNode;
+		pRootNode = nullptr;
+	}
 }
 
 template <typename T>
 bool BSTree<T>::Find(const T& value) const
 {
+	if(IsEmpty() == true)
+	{
+		return false;
+	}
+	
 	return pRootNode->Find(value);
 }
 
@@ -263,7 +368,10 @@ std::queue<typename BSTree<T>::BinTreeNode*> BSTree<T>::CreatePrintQueue() const
 {
 	std::queue<typename  BSTree<T>::BinTreeNode*> returnValue;
 	const int height = pRootNode->Height();
-	CreatePrintQueueByDepth(pRootNode, returnValue, height);
+	for (int depth = 0; depth <= height; ++depth)
+	{
+		CreatePrintQueueByDepth(pRootNode, returnValue, depth);
+	}
 	return returnValue;
 }
 

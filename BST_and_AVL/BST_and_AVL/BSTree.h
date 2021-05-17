@@ -39,7 +39,6 @@ protected:
 		bool Remove(BinTreeNode*& root, BinTreeNode* parentPtr, const T& value);
 		int Height() const;
 		bool Find(const T& value);
-		//int GetSize(BinTreeNode* node);
 		T FindLargest();
 
 		BinTreeNode* pLeftTree;
